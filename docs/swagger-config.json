@@ -1,0 +1,27 @@
+{
+  "urls": [
+    {
+      "url": "./specs/openapi.yaml",
+      "name": "OpenAPI Specification"
+    },
+    {
+      "url": "./specs/petstore.yaml",
+      "name": "Petstore API Example"
+    }
+  ],
+  "validatorUrl": null,
+  "docExpansion": "none",
+  "defaultModelsExpandDepth": 1,
+  "defaultModelExpandDepth": 1,
+  "defaultModelRendering": "model",
+  "displayOperationId": false,
+  "filter": false,
+  "showExtensions": false,
+  "showCommonExtensions": false,
+  "tagsSorter": "alpha",
+  "operationsSorter": "alpha",
+  "supportedSubmitMethods": ["get", "post", "put", "delete", "options", "head", "patch"],
+  "jsonEditor": false,
+  "defaultModelsExpandDepth": 1,
+  "layout": "BaseLayout"
+}
