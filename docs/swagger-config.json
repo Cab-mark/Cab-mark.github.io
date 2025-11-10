@@ -1,12 +1,8 @@
 {
   "urls": [
     {
-      "url": "./specs/openapi.yaml",
-      "name": "OpenAPI Specification"
-    },
-    {
-      "url": "./specs/petstore.yaml",
-      "name": "Petstore API Example"
+      "url": "./specs/jobs.yaml",
+      "name": "Jobs Specification"
     }
   ],
   "validatorUrl": null,

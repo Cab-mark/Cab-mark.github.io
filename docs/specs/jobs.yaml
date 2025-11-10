@@ -1,0 +1,333 @@
+openapi: 3.0.0
+info:
+  title: Civil Service Jobs API (MOCK)
+  description: |
+    MOCK OpenAPI spec for managing Civil Service job postings.
+    THIS IS A MOCK — do NOT use for production, authentication, or real data.
+  version: 1.0.0-mock
+  contact:
+    name: Mock API Team
+    email: mock-api@example.local
+  x-mock: true
+
+servers:
+  - url: https://mock.api.civilservice.jobs/v1
+    description: Mock server for demo/testing only
+
+tags:
+  - name: jobs
+    description: Operations related to job postings (MOCK)
+
+paths:
+  /jobs:
+    get:
+      tags: [jobs]
+      summary: List job postings (MOCK)
+      description: Returns a paginated list of mock job postings.
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
+          description: Free-text search (title/summary)
+        - name: location
+          in: query
+          schema:
+            type: string
+          description: Filter by location name or region
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: per_page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Paginated list of jobs (MOCK)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobList'
+    post:
+      tags: [jobs]
+      summary: Create a job posting (MOCK)
+      description: Create a new mock job posting. All data is synthetic.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobCreate'
+      responses:
+        '201':
+          description: Job created (MOCK)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+        '400':
+          description: Bad request (MOCK)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /jobs/{jobId}:
+    parameters:
+      - name: jobId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: ID of the job (mock ID)
+    get:
+      tags: [jobs]
+      summary: Retrieve a job by ID (MOCK)
+      responses:
+        '200':
+          description: Job found (MOCK)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+        '404':
+          description: Job not found (MOCK)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      tags: [jobs]
+      summary: Update a job partially (MOCK)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JobUpdate'
+      responses:
+        '200':
+          description: Updated job (MOCK)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+        '400':
+          description: Validation error (MOCK)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags: [jobs]
+      summary: Delete a job (MOCK)
+      responses:
+        '204':
+          description: Job deleted (MOCK)
+        '404':
+          description: Job not found (MOCK)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Job:
+      type: object
+      description: Mock representation of a Civil Service job posting (MOCK)
+      properties:
+        id:
+          type: string
+          example: "CSJ-MOCK-0001"
+        title:
+          type: string
+          example: "Policy Advisor (Mock)"
+        summary:
+          type: string
+          example: "Short mock summary of the role."
+        description:
+          type: string
+          example: "Full job description (MOCK data)."
+        employer:
+          $ref: '#/components/schemas/Employer'
+        primary_location:
+          $ref: '#/components/schemas/Location'
+        locations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Location'
+        salary:
+          $ref: '#/components/schemas/SalaryRange'
+        salary_display:
+          type: string
+          example: "£30,000 - £40,000 per year (MOCK)"
+        closing_date:
+          type: string
+          format: date
+          example: "2026-06-30"
+        published_date:
+          type: string
+          format: date
+          example: "2025-11-01"
+        employment_type:
+          type: string
+          enum: ["Permanent", "Temporary", "Secondment", "Fixed-term", "Apprenticeship"]
+          example: "Permanent"
+        remote_friendly:
+          type: boolean
+          example: true
+      required: [id, title, employer, primary_location, published_date]
+
+    JobCreate:
+      type: object
+      description: Fields required to create a mock job posting (MOCK)
+      properties:
+        title:
+          type: string
+        summary:
+          type: string
+        description:
+          type: string
+        employer_id:
+          type: string
+        primary_location:
+          $ref: '#/components/schemas/Location'
+        salary:
+          $ref: '#/components/schemas/SalaryRange'
+        closing_date:
+          type: string
+          format: date
+        employment_type:
+          type: string
+      required: [title, employer_id, primary_location]
+
+    JobUpdate:
+      type: object
+      description: Fields allowed for partial update (MOCK)
+      properties:
+        title:
+          type: string
+        summary:
+          type: string
+        description:
+          type: string
+        salary:
+          $ref: '#/components/schemas/SalaryRange'
+        closing_date:
+          type: string
+          format: date
+        employment_type:
+          type: string
+
+    Employer:
+      type: object
+      description: Mock employer/department (MOCK)
+      properties:
+        id:
+          type: string
+          example: "DEP-MOCK-001"
+        name:
+          type: string
+          example: "Department of Mock Services"
+        website:
+          type: string
+          format: uri
+          example: "https://www.mock-department.gov.uk"
+        contact_email:
+          type: string
+          format: email
+          example: "jobs@mock-department.gov.uk"
+
+    Location:
+      type: object
+      description: Mock location data
+      properties:
+        name:
+          type: string
+          example: "London"
+        region:
+          type: string
+          example: "Greater London"
+        postal_code:
+          type: string
+          example: "SW1A 1AA"
+        coordinates:
+          type: object
+          properties:
+            lat:
+              type: number
+              format: float
+              example: 51.5010
+            lon:
+              type: number
+              format: float
+              example: -0.1416
+
+    SalaryRange:
+      type: object
+      description: Mock salary range (MOCK)
+      properties:
+        min:
+          type: integer
+          example: 30000
+        max:
+          type: integer
+          example: 40000
+        currency:
+          type: string
+          example: "GBP"
+        period:
+          type: string
+          enum: ["year", "month", "week"]
+          example: "year"
+
+    JobList:
+      type: object
+      description: Paginated list of mock jobs (MOCK)
+      properties:
+        meta:
+          $ref: '#/components/schemas/Pagination'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Job'
+
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          example: 1
+        per_page:
+          type: integer
+          example: 20
+        total_items:
+          type: integer
+          example: 123
+        total_pages:
+          type: integer
+          example: 7
+
+    Error:
+      type: object
+      description: Standard error response (MOCK)
+      properties:
+        code:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: "Not found (MOCK)"
+        details:
+          type: array
+          items:
+            type: string
+          example: ["Resource not found (MOCK)"]
